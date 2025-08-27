@@ -1,83 +1,61 @@
 import streamlit as st
 import openai
 
-# -------------------------
-# PAGE CONFIG
-# -------------------------
+# --- Page Config ---
 st.set_page_config(
     page_title="TribalDesk AI",
-    page_icon="🌐",
-    layout="wide"
+    page_icon="🌿",
+    layout="centered"
 )
 
-# -------------------------
-# LANDING PAGE
-# -------------------------
-st.title("🌐 TribalDesk AI")
-st.write("Your interactive AI assistant for grants, tribal governance, and small business support.")
+# --- Sidebar Navigation ---
+st.sidebar.title("🌿 TribalDesk AI")
+page = st.sidebar.radio("Go to:", ["Home", "AI Assistant"])
 
-st.markdown("""
-Welcome to **TribalDesk AI** — a platform designed to help tribes, nonprofits, and small businesses 
-access funding, resources, and tools for growth.  
-
-👉 Use the navigation sidebar to explore features like:
-- **Grant Generator** – draft tailored proposals  
-- **Funding Database** – explore current opportunities  
-- **Peacekeeping Program Tools** – support tribal court mediation  
-- **Business Resources** – documents, contracts, and guides  
-""")
-
-# -------------------------
-# SIDEBAR NAVIGATION
-# -------------------------
-st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to:", ["Home", "Grant Generator", "Funding Database", "AI Assistant"])
-
-# -------------------------
-# HOME PAGE
-# -------------------------
+# --- Home / Landing Page ---
 if page == "Home":
-    st.subheader("Welcome to TribalDesk AI")
-    st.write("Select a tool from the sidebar to get started.")
+    st.title("🌿 Welcome to TribalDesk AI")
+    st.subheader("Your AI-powered partner for Tribal Grants, Business, and Mediation Tools")
 
-# -------------------------
-# GRANT GENERATOR
-# -------------------------
-elif page == "Grant Generator":
-    st.subheader("Grant Proposal Generator")
-    grant_topic = st.text_input("Enter your project focus (e.g., Tribal Health, Animal Control, Mediation)")
-    
-    if st.button("Generate Proposal Draft"):
-        if grant_topic:
-            st.success(f"Here’s a draft for your project: **{grant_topic}**")
-            st.write("🔹 [AI-generated proposal draft will appear here once we connect OpenAI.]")
-        else:
-            st.warning("Please enter a project focus.")
+    st.markdown(
+        """
+        ### What TribalDesk AI Does:
+        - 📑 Generate and organize **grant proposals**
+        - ⚖️ Support **Tribal Peacekeeping Mediation Programs**
+        - 📊 Build tools for **tribal businesses and governments**
+        - 💡 Provide **AI-powered insights** for your projects
 
-# -------------------------
-# FUNDING DATABASE
-# -------------------------
-elif page == "Funding Database":
-    st.subheader("Funding Opportunities")
-    st.write("🔍 Here you’ll be able to search tribal, federal, foundation, and corporate grants.")
-    st.info("Database integration coming soon!")
+        ---
+        **Getting Started:**
+        - Use the sidebar to switch to the **AI Assistant**
+        - Ask questions, draft documents, and explore grant opportunities
+        """
+    )
 
-# -------------------------
-# AI ASSISTANT
-# -------------------------
+    st.success("Tip: Add more pages later (Grants, Mediation, Business Tools).")
+
+# --- AI Assistant Page ---
 elif page == "AI Assistant":
-    st.subheader("Chat with TribalDesk AI")
-    user_input = st.text_area("Ask a question:")
-    
-    if st.button("Ask"):
-        if user_input:
-            st.write("🤖 AI Response:")
-            st.write("🔹 [AI-generated response will appear here once we connect OpenAI.]")
-        else:
-            st.warning("Please enter a question.")
+    st.title("🤖 TribalDesk AI Assistant")
 
-# -------------------------
-# FOOTER
-# -------------------------
-st.markdown("---")
-st.caption("🚀 Powered by Streamlit | TribalDesk AI © 2025")
+    # User input
+    user_input = st.text_area("Ask me anything about grants, mediation, or tribal business:")
+
+    if st.button("Send"):
+        if not user_input.strip():
+            st.warning("Please enter a question first.")
+        else:
+            try:
+                # Call OpenAI API
+                response = openai.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[
+                        {"role": "system", "content": "You are TribalDesk AI, an expert in grants, mediation, and tribal business support."},
+                        {"role": "user", "content": user_input}
+                    ]
+                )
+                ai_reply = response.choices[0].message.content
+                st.markdown(f"**AI Response:**\n\n{ai_reply}")
+
+            except Exception as e:
+                st.error(f"Error: {e}")
