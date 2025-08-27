@@ -10,30 +10,21 @@ This pack gives you a clean, working, monetizable Streamlit app with:
 * **Payhip** store buttons/embeds
 * Safe **secrets** handling and a one-click deploy flow
 
-Use the exact file/folder names below.
+import streamlit as st
 
----
+st.set_page_config(
+    page_title="TribalDesk AI",
+    page_icon="🌐",
+    layout="wide",
+)
 
-## 📁 Repository Structure
+st.title("🌐 TribalDesk AI")
+st.subheader("Empowering Tribes with AI-driven tools")
 
-```
-tribaldesk-ai/
-├─ streamlit_app.py                 # Landing page (home)
-├─ pages/
-│  ├─ 1_Chat_Assistant.py
-│  ├─ 2_Proposal_Generator.py
-│  └─ 3_Grant_Finder.py
-├─ utils/
-│  ├─ openai_client.py
-│  └─ storage.py
-├─ data/
-│  └─ company_context.md            # Business/landing context injected into AI
-├─ requirements.txt
-├─ .gitignore
-├─ README.md
-└─ .streamlit/
-   └─ secrets.toml                  # (You create this on Streamlit Cloud, not in repo)
-```
+st.write("""
+Welcome to **TribalDesk AI** — your all-in-one tool for grant writing, peacekeeping mediation,
+and community development. Use the navigation menu to explore available tools.
+""")
 
 ---
 
