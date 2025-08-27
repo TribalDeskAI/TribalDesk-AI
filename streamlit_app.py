@@ -442,7 +442,7 @@ A simple, monetizable app for Tribal governments, nonprofits, and Native-owned b
 ## 2) Streamlit Cloud
 1. Create a new app from this GitHub repo.
 2. Set the **Main file** to `streamlit_app.py`.
-3. Add **Secrets** (Settings → Secrets):
+# 3. Add Secrets (Go to: Settings > Secrets in Streamlit Cloud)
 ```
 
 OPENAI\_API\_KEY = "sk-..."
