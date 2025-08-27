@@ -1,98 +1,83 @@
 import streamlit as st
-import requests
-import os
+import openai
 
-# -----------------------
-# TribalDesk AI Grant Generator
-# -----------------------
+# -------------------------
+# PAGE CONFIG
+# -------------------------
+st.set_page_config(
+    page_title="TribalDesk AI",
+    page_icon="🌐",
+    layout="wide"
+)
 
-st.set_page_config(page_title="TribalDesk AI", page_icon="🌐", layout="wide")
-
-# Title
-st.title("🌐 TribalDesk AI – Grant Generator")
+# -------------------------
+# LANDING PAGE
+# -------------------------
+st.title("🌐 TribalDesk AI")
+st.write("Your interactive AI assistant for grants, tribal governance, and small business support.")
 
 st.markdown("""
-Welcome to **TribalDesk AI**!  
-This tool helps you **search grants** and **draft proposals** quickly.  
+Welcome to **TribalDesk AI** — a platform designed to help tribes, nonprofits, and small businesses 
+access funding, resources, and tools for growth.  
+
+👉 Use the navigation sidebar to explore features like:
+- **Grant Generator** – draft tailored proposals  
+- **Funding Database** – explore current opportunities  
+- **Peacekeeping Program Tools** – support tribal court mediation  
+- **Business Resources** – documents, contracts, and guides  
 """)
 
-# Sidebar for navigation
-menu = st.sidebar.radio("📂 Menu", ["Home", "Find Grants", "Generate Proposal", "About"])
+# -------------------------
+# SIDEBAR NAVIGATION
+# -------------------------
+st.sidebar.title("Navigation")
+page = st.sidebar.radio("Go to:", ["Home", "Grant Generator", "Funding Database", "AI Assistant"])
 
-# -----------------------
-# Home
-# -----------------------
-if menu == "Home":
-    st.subheader("🏠 Home")
-    st.write("""
-    - Use **Find Grants** to search open opportunities.  
-    - Use **Generate Proposal** to draft a professional grant proposal.  
-    - All powered by AI, built for tribal governments, non-profits, and small businesses.
-    """)
+# -------------------------
+# HOME PAGE
+# -------------------------
+if page == "Home":
+    st.subheader("Welcome to TribalDesk AI")
+    st.write("Select a tool from the sidebar to get started.")
 
-# -----------------------
-# Find Grants
-# -----------------------
-elif menu == "Find Grants":
-    st.subheader("🔍 Find Grants")
-
-    keyword = st.text_input("Enter a keyword (e.g., 'animal control', 'education', 'healthcare')")
-    if st.button("Search Grants"):
-        if keyword.strip() == "":
-            st.warning("Please enter a keyword.")
-        else:
-            # Placeholder for API call
-            st.success(f"Searching grants for: **{keyword}**")
-            st.info("👉 In a real version, this would connect to Grants.gov or a funding database.")
-
-            # Example results
-            sample_grants = [
-                {"title": "Animal Control & Welfare Support", "funder": "USDA", "deadline": "Dec 15, 2025"},
-                {"title": "Community Health Initiative", "funder": "HHS", "deadline": "Jan 20, 2026"},
-            ]
-            for g in sample_grants:
-                st.write(f"**{g['title']}**  \nFunder: {g['funder']}  \nDeadline: {g['deadline']}")
-
-# -----------------------
-# Generate Proposal
-# -----------------------
-elif menu == "Generate Proposal":
-    st.subheader("📝 Generate Proposal")
-
-    org_name = st.text_input("Organization Name")
-    project_name = st.text_input("Project Name")
-    project_goal = st.text_area("Project Goal / Description")
-    funding_amount = st.text_input("Requested Funding Amount")
-
+# -------------------------
+# GRANT GENERATOR
+# -------------------------
+elif page == "Grant Generator":
+    st.subheader("Grant Proposal Generator")
+    grant_topic = st.text_input("Enter your project focus (e.g., Tribal Health, Animal Control, Mediation)")
+    
     if st.button("Generate Proposal Draft"):
-        if not org_name or not project_name or not project_goal or not funding_amount:
-            st.warning("Please fill in all fields.")
+        if grant_topic:
+            st.success(f"Here’s a draft for your project: **{grant_topic}**")
+            st.write("🔹 [AI-generated proposal draft will appear here once we connect OpenAI.]")
         else:
-            st.success("✅ Proposal Draft Generated")
-            st.markdown(f"""
-            ### Grant Proposal Draft  
+            st.warning("Please enter a project focus.")
 
-            **Organization:** {org_name}  
-            **Project Name:** {project_name}  
-            **Requested Funding:** {funding_amount}  
+# -------------------------
+# FUNDING DATABASE
+# -------------------------
+elif page == "Funding Database":
+    st.subheader("Funding Opportunities")
+    st.write("🔍 Here you’ll be able to search tribal, federal, foundation, and corporate grants.")
+    st.info("Database integration coming soon!")
 
-            **Project Goal:**  
-            {project_goal}  
+# -------------------------
+# AI ASSISTANT
+# -------------------------
+elif page == "AI Assistant":
+    st.subheader("Chat with TribalDesk AI")
+    user_input = st.text_area("Ask a question:")
+    
+    if st.button("Ask"):
+        if user_input:
+            st.write("🤖 AI Response:")
+            st.write("🔹 [AI-generated response will appear here once we connect OpenAI.]")
+        else:
+            st.warning("Please enter a question.")
 
-            **Expected Impact:**  
-            This project will strengthen the community by addressing key needs and creating lasting impact.
-            """)
-
-# -----------------------
-# About
-# -----------------------
-elif menu == "About":
-    st.subheader("ℹ️ About TribalDesk AI")
-    st.write("""
-    TribalDesk AI is a platform designed to:
-    - Help tribes, nonprofits, and small businesses **find funding**.  
-    - Generate **professional proposals** quickly.  
-    - Streamline the grant application process.  
-
-    Built with ❤️ using Streamlit + AI.
-    """)
+# -------------------------
+# FOOTER
+# -------------------------
+st.markdown("---")
+st.caption("🚀 Powered by Streamlit | TribalDesk AI © 2025")
