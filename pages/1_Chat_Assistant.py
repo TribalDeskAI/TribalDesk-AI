@@ -73,3 +73,16 @@ if col_clear.button("Clear Chat"):
         )}
     ]
     st.rerun()
+
+from openai import OpenAI
+import streamlit as st
+from pathlib import Path
+
+def get_client():
+    if "OPENAI_API_KEY" not in st.secrets or not st.secrets["OPENAI_API_KEY"]:
+        st.error("OPENAI_API_KEY is missing. Add it in Streamlit → Manage app → Settings → Secrets.")
+        st.stop()
+    return OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
+# Optional: model with safe default
+MODEL = st.secrets.get("OPENAI_MODEL", "gpt-4o-mini")
