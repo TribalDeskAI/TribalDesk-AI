@@ -2,17 +2,22 @@ import streamlit as st
 from pathlib import Path
 from openai import OpenAI
 
-# Paths
+# Path for context
 ctx_path = Path("company_context.txt")
 
-# Load context if exists
+# Load company context if exists
 company_context = ctx_path.read_text(encoding="utf-8") if ctx_path.exists() else ""
 
-# Initialize client
+# Initialize OpenAI client
 def get_client():
+    if "OPENAI_API_KEY" not in st.secrets or not st.secrets["OPENAI_API_KEY"]:
+        st.error("❌ OPENAI_API_KEY is missing. Add it in Streamlit → Manage app → Settings → Secrets.")
+        st.stop()
     return OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-# Model selection (defaults)
+client = get_client()
+
+# Model selection (with safe default)
 model_default = st.secrets.get("OPENAI_MODEL", "gpt-4o-mini")
 model = st.sidebar.selectbox(
     "Model",
@@ -30,17 +35,15 @@ if "chat_history" not in st.session_state:
         )}
     ]
 
-client = get_client()
-
-# Chat UI
+# Display chat history
 for msg in [m for m in st.session_state.chat_history if m["role"] != "system"]:
     if msg["role"] == "user":
         st.markdown(f"**You:** {msg['content']}")
     else:
         st.markdown(f"**Assistant:** {msg['content']}")
 
+# Chat input
 user_input = st.text_area("Type your question…", placeholder="How do I structure a DOJ CTAS proposal?", height=100)
-
 col_send, col_clear = st.columns([1, 1])
 
 # Send button
@@ -73,21 +76,3 @@ if col_clear.button("Clear Chat"):
         )}
     ]
     st.rerun()
-
-from openai import OpenAI
-import streamlit as st
-from pathlib import Path
-
-def get_client():
-    if "OPENAI_API_KEY" not in st.secrets or not st.secrets["OPENAI_API_KEY"]:
-        st.error("OPENAI_API_KEY is missing. Add it in Streamlit → Manage app → Settings → Secrets.")
-        st.stop()
-    return OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-
-# Optional: model with safe default
-MODEL = st.secrets.get("OPENAI_MODEL", "gpt-4o-mini")
-stream = client.chat.completions.create(
-    model=MODEL,
-    messages=st.session_state.chat_history,
-    stream=True
-)
