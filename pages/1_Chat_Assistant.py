@@ -86,3 +86,8 @@ def get_client():
 
 # Optional: model with safe default
 MODEL = st.secrets.get("OPENAI_MODEL", "gpt-4o-mini")
+stream = client.chat.completions.create(
+    model=MODEL,
+    messages=st.session_state.chat_history,
+    stream=True
+)
